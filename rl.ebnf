@@ -54,13 +54,13 @@ term            = factor, {multiplicative, factor};
 
 factor          = literal | identifier | function | subexpression | unary ;
 
-unary           = ("!" | "+" | "-"), {expression} ;
+unary           = ("!" | "+" | "-" | "~"), {expression} ;
 
 relational      = "<" | ">" | "==" | "!=", "<=", ">=" ;
 
-additive        = "+" | "-" | "||" ;
+additive        = "+" | "-" | "||" | "|" ;
 
-multiplicative  = "*" | "/" | "%" | "&&" | "^^";
+multiplicative  = "*" | "/" | "%" | "&&" | ">>" | "<<" | "&" | "^";
 
 identifier      = (letter | "_"), {letter | "_" | digit};
 
