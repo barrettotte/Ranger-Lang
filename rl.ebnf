@@ -7,7 +7,8 @@ program         = statement, {statement} ;
 (* Statement rules *)
 
 statement       = declaration | exprStmt   | forStmt   | ifStmt
-                | printStmt   | returnStmt | whileStmt | block ;
+                | printStmt   | returnStmt | whileStmt | block 
+                | exitStmt ;
 
 declaration     = funcDec | varDec ;
 
@@ -33,6 +34,8 @@ ifStmt          = "if", "(", expression, ")", statement, ["else", statement] ;
 whileStmt       = "while", "(", expression, ")", statement ;
 
 printStmt       = "print", "(", expression, ")", ";" ;
+
+exitStmt        = "exit", "(", digit, ")", ";" ;
 
 returnStmt      = "return", [expression], ";";
 

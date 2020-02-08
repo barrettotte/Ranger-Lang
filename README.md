@@ -1,11 +1,7 @@
 # Ranger-Lang
-A basic programming language designed while learning how to write compilers and interpreters
+A basic programming language designed while studying the "Dragon Book".
 
 
-
-## Goals
-* functions, data types (int, real, bool, string)
-* print
 
 
 ## References
