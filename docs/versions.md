@@ -5,9 +5,9 @@
 #### New Features:
 * General language functionality
 * data types: **string**, **bool**, **int**, **real**
-* modulus and exponent operator
 * functions
 * print to stdout
+* Basic REPL
 * new keywords
   * while, if, else, for
   * string, bool, real, int, function
@@ -15,11 +15,15 @@
 
 
 ## Future
+Probably when I rewrite this in a different language...
+
 * switch/case
 * else if
-* REPL
 * lists
 * structures
-* ternary operator
-* elvis operator
+* code importing
+* compound assignment operators
+* power operator '**'
+* file I/O
+* objects
 

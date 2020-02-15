@@ -60,7 +60,7 @@ relational      = "<" | ">" | "==" | "!=", "<=", ">=" ;
 
 additive        = "+" | "-" | "||" | "|" ;
 
-multiplicative  = "*" | "/" | "%" | "&&" | ">>" | "<<" | "&" | "^";
+multiplicative  = "*" | "/" | "%" | "&&" | ">>" | "<<" | "&" | "^" ;
 
 identifier      = (letter | "_"), {letter | "_" | digit};
 
@@ -74,7 +74,7 @@ numeric         = integer | real ;
 datatype        = "bool" | "int" | "real" | "string" ;
 
 boolean         = "true" | "false" 
-                | "1" | "0" ;
+                | "1"    | "0" ;
 
 integer         = ["+" | "-"], digits ;
 
