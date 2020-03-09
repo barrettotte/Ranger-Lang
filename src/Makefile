@@ -27,3 +27,12 @@ clean:
 
 debug:
 	-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt $(TARGET)
+
+clean:
+	rm -f compiler *.o *.s out
+
+test: compiler input01
+	./compiler input01
+	cc -o out out.s
+	./out
+

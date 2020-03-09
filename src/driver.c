@@ -1,3 +1,4 @@
+#include <errno.h>
 #include "ranger-lang.h"
 
 
@@ -16,21 +17,21 @@ int main(int argc, char *argv[]){
         usage(argv[0]);
     }
     init();
-    
+
     if((g_Source = fopen(argv[1], "r")) == NULL){
-        fprintf(stderr, "Unable to open %s: %s\n", argv[1], strerror(errno));
-        exit(1);
+        fprintf(stderr, "Could not open %s: %s\n", argv[1], strerror(errno));
+        return 1;
     }
     if((g_Target = fopen("out.s", "w")) == NULL){
-        fprintf(stderr, "Unable to create out.s: %s\n", strerror(errno));
-        exit(1);
+        fprintf(stderr, "Could not create out.s: %s\n", strerror(errno));
+        return 1;
     }
 
     lex(&g_Token);
     gen_Preamble();
     parse_Statements();
     gen_Postamble();
-
+    
     fclose(g_Target);
     return 0;
 }

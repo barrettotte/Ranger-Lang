@@ -5,24 +5,10 @@
 static int find(char *s, int c){
     char *p;
     p = strchr(s, c);
-    return (p ? p - s : -1);
+    return p ? p - s : -1;
 }
 
-
-// Compare string with possible keywords
-static int cmpKeywords(char *s){
-    switch(*s){
-        case 'p':
-            if(!strcmp(s, "print")){
-                return T_PRINT;
-            }
-            break;
-    }
-    return 0;
-}
-
-
-// Get next character from input file
+// Fetch next character from source file
 static int next(){
     int c;
 
@@ -38,32 +24,33 @@ static int next(){
     return c;
 }
 
-// Reinsert unwanted character
+// Reinsert unwanted character back into stream
 static void reinsert(int c){
     g_Reinsert = c;
 }
 
-// Get character, ignoring unwanted characters (whitespace, newline)
+// Skip whitespace, return next 'interesting' character
 static int skip(){
-    int c = next();
+    int c;
+    c = next();
     while(' ' == c || '\t' == c || '\n' == c || '\r' == c || '\f' == c){
         c = next();
     }
     return c;
 }
 
-// Lex an integer literal
-static int lex_Int(int c){
+// Lex integer literal
+static int lex_Integer(int c){
     int k, val = 0;
     while((k = find("0123456789", c)) >= 0){
         val = val * 10 + k;
         c = next();
     }
-    reinsert(c);
+    reinsert(c); // reinsert non-integer character
     return val;
 }
 
-// Lex an identifer, store in buffer parm, return length of identifier
+// Lex identifier, store in buff, and return identifier length
 static int lex_Identifier(int c, char *buff, int lim){
     int i = 0;
     while(isalpha(c) || isdigit(c) || '_' == c){
@@ -75,23 +62,34 @@ static int lex_Identifier(int c, char *buff, int lim){
         }
         c = next();
     }
-    reinsert(c);
+    reinsert(c); // reinsert non-valid character
     buff[i] = '\0';
     return i;
 }
 
-// Lex and return next token found from input
-// Return 1 if valid token, 0 no tokens left
-int lex(Token *t){
-    int c, tokenType; 
-    c = skip(); // skip whitespace
+// Compare string to possible keywords
+static int cmpKeywords(char *s){
+    switch(*s){
+        case 'p':
+            if(!strcmp(s, "print")){
+                return T_PRINT;
+            }
+            break;
+    }
+    return 0;
+}
 
+// Lex next token. 1 if found, 0 if no tokens left
+int lex(Token_t *t){
+    int c, tokenType;
+    c = skip(); // skip whitespace
+    
     switch(c){
         case EOF:
             t->token = T_EOF;
             return 0;
-        case '+': 
-            t->token = T_PLUS; 
+        case '+':
+            t->token = T_PLUS;
             break;
         case '-':
             t->token = T_MINUS;
@@ -107,7 +105,7 @@ int lex(Token *t){
             break;
         default:
             if(isdigit(c)){
-                t->intvalue  = lex_Int(c);
+                t->intvalue = lex_Integer(c);
                 t->token = T_INTLIT;
                 break;
             } else if(isalpha(c) || '_' == c){
@@ -116,11 +114,10 @@ int lex(Token *t){
                     t->token = tokenType;
                     break;
                 }
-                // Unrecognized keyword
-                printf("Unrecognized symbol %s on line %d\n", g_Text, g_Line);
+                printf("Unrecognised symbol %s on line %d\n", g_Text, g_Line);
                 exit(1);
             }
-            printf("Invalid character %c on line %d", c, g_Line);
+            printf("Unrecognised character %c on line %d\n", c, g_Line);
             exit(1);
     }
     return 1;

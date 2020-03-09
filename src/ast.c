@@ -2,29 +2,27 @@
 
 
 // Create a new AST node
-AstNode *newAstNode(int op, AstNode *left, AstNode *right, int intvalue){
-    AstNode *n;
-    
-    n = (AstNode *) malloc(sizeof(AstNode));
+AstNode_t *newAstNode(int op, AstNode_t *left, AstNode_t *right, int intvalue){
+    AstNode_t *n;
+
+    n = (AstNode_t *) malloc(sizeof(AstNode_t));
     if(n == NULL){
-        fprintf(stderr, "Could not malloc new AST node in newAstNode()\n");
+        fprintf(stderr, "Could not create new AST Node\n");
         exit(1);
     }
     n->op = op;
     n->left = left;
     n->right = right;
-    n->intvalue = intvalue;    
+    n->intvalue = intvalue;
     return n;
 }
 
-
 // Create a new AST leaf
-AstNode *newAstLeaf(int op, int intvalue){
+AstNode_t *newAstLeaf(int op, int intvalue){
     return newAstNode(op, NULL, NULL, intvalue);
 }
 
-
-// Create a unary AST node
-AstNode *newAstUnary(int op, AstNode *left, int intvalue){
-    return newAstNode(op, left, NULL, intvalue);
+// Create a new unary AST node
+AstNode_t *newAstUnary(int op, AstNode_t *left, int intvalue){
+  return newAstNode(op, left, NULL, intvalue);
 }

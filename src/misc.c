@@ -1,6 +1,6 @@
 #include "ranger-lang.h"
 
-// assert current token is t and fetch next token
+
 void match(int t, char *expected){
     if(g_Token.token == t){
         lex(&g_Token);
@@ -10,7 +10,7 @@ void match(int t, char *expected){
     }
 }
 
-// Match semi colon and fetch next token
-void match_semi(){
+// Match semicon and fetch next token
+void match_Semicolon() {
     match(T_SEMI, ";");
 }

@@ -8,77 +8,76 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #define TEXT_LEN 512
 
-
-typedef enum {
-    T_EOF, T_SEMI,
-    T_PLUS, T_MINUS, T_STAR, T_SLASH,
-    T_INTLIT,
-    T_PRINT
+typedef enum{
+    T_EOF, 
+    T_PLUS, T_MINUS, T_STAR, T_SLASH, 
+    T_INTLIT, 
+    T_SEMI, T_PRINT
 } TokenType;
 
 typedef enum{
     A_ADD, A_SUBTRACT, A_MULTIPLY, A_DIVIDE, A_INTLIT
 } NodeType;
 
-
-typedef struct token{
+typedef struct Token{
     int token;
     int intvalue;
-} Token;
+} Token_t;
 
-typedef struct astNode{
+typedef struct AstNode{
     int op;
-    struct astNode *left;
-    struct astNode *right;
+    struct AstNode *left;
+    struct AstNode *right;
     int intvalue;
-} AstNode;
+} AstNode_t;
 
 
 /* Globals */
-int   g_Line;             // current line
-int   g_Reinsert;         // reinsert character into input buffer
-char  g_Text[TEXT_LEN+1]; // last identifier/keyword scanned
-FILE  *g_Source;          // pointer to source program file
-FILE  *g_Listing;         // pointer to compile listing output file
-FILE  *g_Target;          // pointer to target program file
-Token g_Token;            // current token
+int g_Line;                 // current line number
+int g_Reinsert;             // reinsert unwanted character to input stream
+FILE *g_Source;             // pointer to source program file
+FILE *g_Target;             // pointer to target program file
+FILE *g_Listing;            // pointer to compile listing output file
+Token_t g_Token;            // current token
+char g_Text[TEXT_LEN + 1];  // current lexed text
 
 
 /* AST */
-AstNode *newAstNode(int op, AstNode *left, AstNode *right, int intvalue);
-AstNode *newAstLeaf(int op, int intvalue);
-AstNode *newAstUnary(int op, AstNode *left, int intvalue);
+AstNode_t *newAstNode(int op, AstNode_t *left, AstNode_t *right, int intvalue);
+AstNode_t *newAstLeaf(int op, int intvalue);
+AstNode_t *newAstUnary(int op, AstNode_t *left, int intvalue);
 
 /* Lexer */
-int lex(Token *t);
+int lex(Token_t *t);
 
-/* Parser */
-AstNode *parse_BinExpr(int prevPrec);
-void parse_Statements();
-
-/* Code Generation */
-int gen_Ast(AstNode *n);
+/* Generic Code Generator */
+int  gen_AST(AstNode_t *n);
 void gen_Preamble();
 void gen_Postamble();
-void gen_Reset();
-void gen_Printint(int r);
+void gen_Freeregs();
+void gen_Printint(int reg);
 
-/* x86 64-bit assembly code generation */
-void cgasm_Reset();
-void cgasm_Preamble();
-void cgasm_Postamble();
-int  cgasm_Load(int val);
-int  cgasm_Add(int r1, int r2);
-int  cgasm_Sub(int r1, int r2);
-int  cgasm_Mul(int r1, int r2);
-int  cgasm_Div(int r1, int r2);
-void cgasm_Printint(int r);
+/* CPU specific code generation   */
+/* x86 64-bit assembly generation */
+void resetRegisters();
+void cgpreamble();
+void cgpostamble();
+int cgload(int value);
+int cgadd(int r1, int r2);
+int cgsub(int r1, int r2);
+int cgmul(int r1, int r2);
+int cgdiv(int r1, int r2);
+void cgprintint(int r);
+
+/* Parser */
+AstNode_t *parse_BinaryExpr(int ptp);
+void parse_Statements();
 
 /* Misc */
-void match(int t, char *c);
-void match_semi();
+void match(int t, char *expected);
+void match_Semicolon();
+
 
 #endif
