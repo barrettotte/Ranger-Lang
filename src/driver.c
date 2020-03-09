@@ -1,29 +1,14 @@
-#include "common.h"
-#include "globals.h"
-#include "interface.h"
+#include "ranger-lang.h"
 
 
 static void init(){
-    g_line = 1;
-    g_putback = '\n';
+    g_Line = 1;
+    g_Reinsert = '\n';
 }
 
-static void usage(char *pgm){
-    fprintf(stderr, "Usage: %s <infile>\n", pgm);
+static void usage(char *prog) {
+    fprintf(stderr, "Usage: %s <infile>\n", prog);
     exit(1);
-}
-
-char *tokstr[] = {"+", "-", "*", "/", "intlit"};
-
-static void lexFile(){
-    struct token t;
-    while(lex(&t)){
-        printf("Token %s", tokstr[t.token]);
-        if(t.token == T_INTLIT){
-            printf(", value %d", t.intvalue);
-        }
-        printf("\n");
-    }
 }
 
 int main(int argc, char *argv[]){
@@ -31,11 +16,21 @@ int main(int argc, char *argv[]){
         usage(argv[0]);
     }
     init();
-
-    if((g_infile = fopen(argv[1], "r")) == NULL){
+    
+    if((g_Source = fopen(argv[1], "r")) == NULL){
         fprintf(stderr, "Unable to open %s: %s\n", argv[1], strerror(errno));
-        return 1;
+        exit(1);
     }
-    lexFile();
+    if((g_Target = fopen("out.s", "w")) == NULL){
+        fprintf(stderr, "Unable to create out.s: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    lex(&g_Token);
+    gen_Preamble();
+    parse_Statements();
+    gen_Postamble();
+
+    fclose(g_Target);
     return 0;
 }

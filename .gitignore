@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+.vscode
+
+test1
+rangerlang
+comp1
