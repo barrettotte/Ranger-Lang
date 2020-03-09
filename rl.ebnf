@@ -1,111 +1,63 @@
-(* Ranger Lang ENBF grammar rules *)
+(* RangerLang EBNF grammar rules *)
 
 
-program         = statement, {statement} ;
+statements      = statement
+                | statement, statements 
+                ;
 
+statement       = 'print', expression, ";" 
+                | 'int', identifier, "=", expression, ";" 
+                ;
 
-(* Statement rules *)
+expression      = add_expr 
+                ;
 
-statement       = declaration | exprStmt   | forStmt   | ifStmt
-                | printStmt   | returnStmt | whileStmt | block 
-                | exitStmt ;
+add_expr        = mul_expr
+                | add_expr, "+", mul_expr
+                | add_expr, "-", mul_expr 
+                ;
 
-declaration     = funcDec | varDec ;
+mul_expr        = number
+                | number, "*", mul_expr
+                | number, "/", mul_expr
+                ;
 
-parameters      = dataType, identifier, {",", identifier} ;
-
-arguments       = expression, {",", expression} ;
-
-funcDec         = (dataType | "void"), "function", function, block ;
-
-function        = identifier, "(", [parameters], ")" ;
-
-varDec          = dataType, identifier, ["=", expression], ";" ;
-
-exprStmt        = expression, ";" ;
-
-forStmt         = "for", "(" 
-                , (decVar | exprStmt | ";") 
-                , ([expression], ";")
-                , ([expression], ")", statement) ;
-
-ifStmt          = "if", "(", expression, ")", statement, ["else", statement] ;
-
-whileStmt       = "while", "(", expression, ")", statement ;
-
-printStmt       = "print", "(", expression, ")", ";" ;
-
-exitStmt        = "exit", "(", digit, ")", ";" ;
-
-returnStmt      = "return", [expression], ";";
-
-block           = "{", {statement}, "}" ;
-
-
-(* Expression rules *)
-
-expression      = term {additive, term}, {relational, term, {additive, term}};
-
-assignment      = identifier, "=", expression ;
-
-subexpression   = "(", expression, ")" ;
-
-term            = factor, {multiplicative, factor};
-
-factor          = literal | identifier | function | subexpression | unary ;
-
-unary           = ("!" | "+" | "-" | "~"), {expression} ;
-
-relational      = "<" | ">" | "==" | "!=", "<=", ">=" ;
-
-additive        = "+" | "-" | "||" | "|" ;
-
-multiplicative  = "*" | "/" | "%" | "&&" | ">>" | "<<" | "&" | "^" ;
-
-identifier      = (letter | "_"), {letter | "_" | digit};
-
-literal         = boolean | numeric | string ;
-
-numeric         = integer | real ;
-
-
-(* Data type rules *)
-
-datatype        = "bool" | "int" | "real" | "string" ;
-
-boolean         = "true" | "false" 
-                | "1"    | "0" ;
-
-integer         = ["+" | "-"], digits ;
-
-real            = ["+" | "-"], digits, [(".", digits)] ;
-
-string          = "'", {character - "'"}, "'"
-                | '"', {character - '"'}, '"' ;
+identifier      = letter, {letter | digit | "_"} 
+                ;
 
 
 (* Fundamental rules *)
 
-character       = digit | letter | symbol ;
+character       = digit | letter | symbol 
+                ;
 
-letter          = uppercase | lowercase ;
+letter          = uppercase | lowercase 
+                ;
 
-digits          = digit, {digit} ;
+number          = digit, {digit} 
+                ;
 
-digit           = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+digit           = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" 
+                ;
+
+whitespace      = ? whitespace characters ? 
+                ;
 
 symbol          = " " | "'" | '"' | "!" | "@" | "#" | "$" | "%" | "^" | "&"
                 | "*" | "(" | ")" | "_" | "-" | "+" | "=" | ";" | ":" | ","
                 | "." | "<" | ">" | "/" | "?" | "[" | "{" | "]" | "}" | "|"
-                | "\" | "~" | "`" ;
+                | "\" | "~" | "`" 
+                ;
 
 uppercase       = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
                 | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
-                | "U" | "V" | "W" | "X" | "Y" | "Z" ;
+                | "U" | "V" | "W" | "X" | "Y" | "Z" 
+                ;
 
 lowercase       = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" 
                 | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" 
-                | "u" | "v" | "w" | "x" | "y" | "z" ;
+                | "u" | "v" | "w" | "x" | "y" | "z" 
+                ;
 
 
 (* ENBF Cheatsheet - https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form

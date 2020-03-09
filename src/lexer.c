@@ -55,8 +55,7 @@ static int lex_Identifier(int c, char *buff, int lim){
     int i = 0;
     while(isalpha(c) || isdigit(c) || '_' == c){
         if(lim - 1 == i){
-            printf("Identifier too long on line %d\n", g_Line);
-            exit(1);
+            fatal("Identifier too long");
         } else if(i < lim - 1){
             buff[i++] = c;
         }
@@ -68,11 +67,16 @@ static int lex_Identifier(int c, char *buff, int lim){
 }
 
 // Compare string to possible keywords
-static int cmpKeywords(char *s){
+static int match_Keyword(char *s){
     switch(*s){
         case 'p':
             if(!strcmp(s, "print")){
                 return T_PRINT;
+            }
+            break;
+        case 'i':
+            if(!strcmp(s, "int")){
+                return T_INT;
             }
             break;
     }
@@ -85,40 +89,28 @@ int lex(Token_t *t){
     c = skip(); // skip whitespace
     
     switch(c){
-        case EOF:
-            t->token = T_EOF;
-            return 0;
-        case '+':
-            t->token = T_PLUS;
-            break;
-        case '-':
-            t->token = T_MINUS;
-            break;
-        case '*':
-            t->token = T_STAR;
-            break;
-        case '/':
-            t->token = T_SLASH;
-            break;
-        case ';':
-            t->token = T_SEMI;
-            break;
+        case EOF:   t->token = T_EOF;       return 0;
+        case '+':   t->token = T_PLUS;      break;
+        case '-':   t->token = T_MINUS;     break;
+        case '*':   t->token = T_STAR;      break;
+        case '/':   t->token = T_SLASH;     break;
+        case ';':   t->token = T_SEMICOLON; break;
+        case '=':   t->token = T_EQUALS;    break;
         default:
             if(isdigit(c)){
                 t->intvalue = lex_Integer(c);
-                t->token = T_INTLIT;
+                t->token = T_INTLITERAL;
                 break;
             } else if(isalpha(c) || '_' == c){
                 lex_Identifier(c, g_Text, TEXT_LEN);
-                if((tokenType = cmpKeywords(g_Text))){
+                if((tokenType = match_Keyword(g_Text))){
                     t->token = tokenType;
                     break;
                 }
-                printf("Unrecognised symbol %s on line %d\n", g_Text, g_Line);
-                exit(1);
+                t->token = T_IDENTIFIER; // not a keyword, assume identifier
+                break;
             }
-            printf("Unrecognised character %c on line %d\n", c, g_Line);
-            exit(1);
+            fatalc("Unrecognised character", c);
     }
     return 1;
 }

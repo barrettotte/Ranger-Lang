@@ -5,6 +5,7 @@
 static void init(){
     g_Line = 1;
     g_Reinsert = '\n';
+    g_NextFreeSymbol = 0;
 }
 
 static void usage(char *prog) {

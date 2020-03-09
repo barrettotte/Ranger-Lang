@@ -34,6 +34,9 @@
 .vscode
 
 input01
+input02
+
 rangerlang
 compiler
 out
+out.s

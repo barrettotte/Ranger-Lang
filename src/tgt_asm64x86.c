@@ -10,15 +10,6 @@ static char *registerNames[REG_LEN] = {
     "%r8", "%r9", "%r10", "%r11"
 };
 
-
-
-// Reset state of all registers
-void resetRegisters(){
-    for(int i = 0; i < REG_LEN; i++){
-        registers[i] = 1;
-    }
-}
-
 // Reset state of register
 static void resetRegister(int reg){
     if(registers[reg] != 0){
@@ -40,9 +31,15 @@ static int allocateRegister(){
     exit(1);
 }
 
+// Reset state of all registers
+void cg_ResetRegisters(){
+    for(int i = 0; i < REG_LEN; i++){
+        registers[i] = 1;
+    }
+}
 
-void cgpreamble() {
-    resetRegisters();
+void cg_Preamble() {
+    cg_ResetRegisters();
     fputs(
         "\t.text\n"
         ".LC0:\n"
@@ -69,36 +66,36 @@ void cgpreamble() {
     );
 }
 
-void cgpostamble(){
+void cg_Postamble(){
     fputs("\tmovl	$0, %eax\n" "\tpopq	%rbp\n" "\tret\n", g_Target);
 }
 
 
-int cgload(int value){
+int cg_LoadInt(int value){
     int r = allocateRegister();
     fprintf(g_Target, "\tmovq\t$%d, %s\n", value, registerNames[r]);
     return r;
 }
 
-int cgadd(int r1, int r2){
+int cg_Add(int r1, int r2){
     fprintf(g_Target, "\taddq\t%s, %s\n", registerNames[r1], registerNames[r2]);
     resetRegister(r1);
     return r2;
 }
 
-int cgsub(int r1, int r2){
+int cg_Sub(int r1, int r2){
     fprintf(g_Target, "\tsubq\t%s, %s\n", registerNames[r2], registerNames[r1]);
     resetRegister(r2);
     return r1;
 }
 
-int cgmul(int r1, int r2){
+int cg_Mul(int r1, int r2){
     fprintf(g_Target, "\timulq\t%s, %s\n", registerNames[r1], registerNames[r2]);
     resetRegister(r1);
     return r2;
 }
 
-int cgdiv(int r1, int r2){
+int cg_Div(int r1, int r2){
     fprintf(g_Target, "\tmovq\t%s,%%rax\n", registerNames[r1]);
     fprintf(g_Target, "\tcqo\n");
     fprintf(g_Target, "\tidivq\t%s\n", registerNames[r2]);
@@ -107,8 +104,26 @@ int cgdiv(int r1, int r2){
     return r1;
 }
 
-void cgprintint(int r){
+void cg_PrintInt(int r){
     fprintf(g_Target, "\tmovq\t%s, %%rdi\n", registerNames[r]);
     fprintf(g_Target, "\tcall\tprintint\n");
     resetRegister(r);
+}
+
+// Load register with value
+int cg_LoadSymbol(char *identifier){
+    int r = allocateRegister();
+    fprintf(g_Target, "\tmovq\t%s(\%%rip), %s\n", identifier, registerNames[r]);
+    return r;
+}
+
+// Store register value into variable
+int cg_StoreSymbol(int r, char *identifier){
+    fprintf(g_Target, "\tmovq\t%s, %s(\%%rip)\n", registerNames[r], identifier);
+    return r;
+}
+
+// Generate new symbol
+void cg_NewSymbol(char *symbol){
+    fprintf(g_Target, "\t.comm\t%s,8,8\n", symbol);
 }

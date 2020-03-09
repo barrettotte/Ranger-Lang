@@ -7,13 +7,12 @@ AstNode_t *newAstNode(int op, AstNode_t *left, AstNode_t *right, int intvalue){
 
     n = (AstNode_t *) malloc(sizeof(AstNode_t));
     if(n == NULL){
-        fprintf(stderr, "Could not create new AST Node\n");
-        exit(1);
+        fatal("Could not create new AST Node");
     }
     n->op = op;
     n->left = left;
     n->right = right;
-    n->intvalue = intvalue;
+    n->v.intvalue = intvalue;
     return n;
 }
 
