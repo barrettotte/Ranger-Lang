@@ -1,63 +1,43 @@
 (* RangerLang EBNF grammar rules *)
 
 
-statements      = statement
-                | statement, statements 
-                ;
 
-statement       = 'print', expression, ";" 
-                | 'int', identifier, "=", expression, ";" 
-                ;
-
-expression      = add_expr 
-                ;
-
-add_expr        = mul_expr
-                | add_expr, "+", mul_expr
-                | add_expr, "-", mul_expr 
-                ;
-
-mul_expr        = number
-                | number, "*", mul_expr
-                | number, "/", mul_expr
-                ;
-
-identifier      = letter, {letter | digit | "_"} 
-                ;
+identifier          = letter, {letter | digit | "_"} 
+                    ;
 
 
 (* Fundamental rules *)
 
-character       = digit | letter | symbol 
-                ;
+character           = digit | letter | symbol 
+                    ;
 
-letter          = uppercase | lowercase 
-                ;
+letter              = uppercase | lowercase 
+                    ;
 
-number          = digit, {digit} 
-                ;
+number              = digit, {digit} 
+                    ;
 
-digit           = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" 
-                ;
+digit               = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" 
+                    ;
 
-whitespace      = ? whitespace characters ? 
-                ;
+whitespace          = ? whitespace characters ? 
+                    ;
 
-symbol          = " " | "'" | '"' | "!" | "@" | "#" | "$" | "%" | "^" | "&"
-                | "*" | "(" | ")" | "_" | "-" | "+" | "=" | ";" | ":" | ","
-                | "." | "<" | ">" | "/" | "?" | "[" | "{" | "]" | "}" | "|"
-                | "\" | "~" | "`" 
-                ;
+symbol              = " " | "'" | '"' | "!" | "@" | "#" | "$" | "%" | "^" | "&"
+                    | "*" | "(" | ")" | "_" | "-" | "+" | "=" | ";" | ":" | ","
+                    | "." | "<" | ">" | "/" | "?" | "[" | "{" | "]" | "}" | "|"
+                    | "\" | "~" | "`" 
+                    ;
 
-uppercase       = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
-                | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
-                | "U" | "V" | "W" | "X" | "Y" | "Z" 
-                ;
+uppercase           = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                    | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                    | "U" | "V" | "W" | "X" | "Y" | "Z" 
+                    ;
 
-lowercase       = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" 
-                | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" 
-                | "u" | "v" | "w" | "x" | "y" | "z" 
-                ;
+lowercase           = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" 
+                    | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" 
+                    | "u" | "v" | "w" | "x" | "y" | "z" 
+                    ;
 
 
 (* ENBF Cheatsheet - https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form
