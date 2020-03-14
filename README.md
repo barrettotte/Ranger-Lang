@@ -14,5 +14,5 @@ A programming language designed while studying how to write compilers.
   * Dangling else - https://en.wikipedia.org/wiki/Dangling_else
   * Pratt Parsing (operator precedence) - https://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/
   * x86 64-bit assembly reference - https://www.felixcloutier.com/x86/
-
+  * Crafting Interpreters - http://craftinginterpreters.com/
   

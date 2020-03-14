@@ -1,0 +1,42 @@
+
+RangerLang Compile Listing for ../tests/factorial.rl
+   1: /* Compute a factorial
+   2:   in RangerLang
+   3: */
+   4: 
+   5: read x; /* input an integer */
+   6: 
+   7: if(x > 0);
+   8:   fact := 1;
+   9: 
+  10:   dow(x = 0);
+  11:     fact := fact * x;
+  12:     x := x - 1;
+  13:   enddo;
+  14: 
+  15:   write fact;
+  16:   
+  17: endif;
+
+Syntax Tree:
+  Read: x
+  If
+    Operator: >
+      Identifier: x
+      Literal: 0
+    Assignment: fact
+      Literal: 1
+    Dow
+      Operator: =
+        Identifier: x
+        Literal: 0
+      Assignment: fact
+        Operator: *
+          Identifier: fact
+          Identifier: x
+      Assignment: x
+        Operator: -
+          Identifier: x
+          Literal: 1
+    Write
+      Identifier: fact
