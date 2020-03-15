@@ -3,14 +3,16 @@ CFLAGS = -Wall -g -rdynamic -Werror
 LIBS = -lm -pthread
 
 TARGET = rangerlang
+SRCDIR = src
+TESTDIR = tests
 
 .PHONY: default all clean
 
 default:	$(TARGET)
 all:		default
 
-OBJECTS = $(patsubst %.c, %.o, $(wildcard *.c))
-HEADERS = $(wildcard *.h)
+OBJECTS = $(patsubst $(SRCDIR)/%.c, $(SRCDIR)/%.o, $(wildcard $(SRCDIR)/*.c))
+HEADERS = $(wildcard $(SRCDIR)/*.h)
 
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -19,11 +21,10 @@ HEADERS = $(wildcard *.h)
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LIBS) -o $@
-
+	
 clean:
-	-rm -f *.o
+	-rm -f $(SRCDIR)*.o
+	-rm -f $(TESTDIR)/*.txt
+	-rm -f $(TESTDIR)/*.asm
 	-rm -f $(TARGET)
 	-rm -f valgrind-out.txt
-
-debug:
-	-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt $(TARGET)

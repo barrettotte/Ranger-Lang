@@ -29,10 +29,17 @@
 #endif
 
 
+/* Length Definitions */
 #define MAXKEYWORDS   8     // number of keywords
 #define MAXTREECHILD  3     // number of children in tree
 #define MAXTOKENLEN  40     // maximum token size
 
+
+/* Compile Listing Flags */
+#define DEBUG_LEXER  FALSE  // include debug output for lexer
+#define DEBUG_PARSER FALSE  // include debug output for parser
+#define PRINT_TREE   TRUE   // include syntax tree in listing
+#define PRINT_STDOUT FALSE  // print compile listing to STDOUT
 
 
 /*********************************************************/
@@ -41,12 +48,13 @@
 
 int g_Lineno;                  // source line number
 
-FILE* g_Source;                // file pointer to source program
-FILE* g_Listing;               // file pointer to compile listing
-FILE* g_Target;                // file pointer to target program
+FILE *g_Source;                // file pointer to source program
+FILE *g_Listing;               // file pointer to compile listing
+FILE *g_Target;                // file pointer to target program
 
 int g_Error;                   // track if error occurs during compilation
 char g_Lexeme[MAXTOKENLEN+1];  // lexeme of identifier or keyword
+
 
 
 /*********************************************************/
@@ -113,21 +121,23 @@ typedef struct treeNode{
 /*********************************************************/
 
 /* Lexer */
-TokenType getToken();                         // returns next token from source program
+TokenType getToken();                                  // return next token from source program
 
 /* Parser */
-TreeNode *parse();                            // returns built syntax tree of source program
+TreeNode *parse();                                     // return built syntax tree of source program
 
 /* Syntax Tree */
-TreeNode *newStmtNode(StmtKind sk);           // create new statement node
-TreeNode *newExprNode(ExprKind ek);           // create new expression node
+TreeNode *newStmtNode(StmtKind sk);                    // create new statement node
+TreeNode *newExprNode(ExprKind ek);                    // create new expression node
 
 /* Printing */
-void printToken(TokenType tt, const char *c); // print token and lexeme to compile listing
-void printTree(TreeNode *root);               // print tree to compile listing
+void printToken(TokenType tt, const char *c);          // print token and lexeme to compile listing
+void printTree(TreeNode *root);                        // print tree to compile listing
+void fprintf_if(FILE *f, const char *m, const int c);  // fprintf to file only if cond is true
+void printFile(const char *filePath);                  // print file contents to STDOUT
 
 /* Misc */
-char *copyString(char *s);                    // make new copy of string s
+char *copyString(char *s);                             // make new copy of string s
 
 
 

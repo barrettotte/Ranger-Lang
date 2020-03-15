@@ -7,6 +7,30 @@ static int indentno = 0; // used by printTree
 #define UNINDENT indentno -= 2
 
 
+// fprintf to file only if cond is true
+void fprintf_if(FILE *file, const char *msg, const int cond){
+    if(cond){
+        fprintf(file, "%s", msg);
+    }
+}
+
+
+// Print file contents to STDOUT
+void printFile(const char *filePath){
+    FILE *file;
+    int c;
+    file = fopen(filePath, "r");
+    if(file){
+        while((c = getc(file)) != EOF){
+            putchar(c);
+        }
+        fclose(g_Listing);
+    } else{
+        printf("Could not open %s\n", filePath);
+    }
+}
+
+
 // create new statement node
 TreeNode *newStmtNode(StmtKind stmtKind){
     TreeNode *t = (TreeNode *) malloc(sizeof(TreeNode));
@@ -60,9 +84,9 @@ void printToken(TokenType tokenType, const char *lexeme){
         case T_STAR:       fprintf(g_Listing, "*\n");   break;
         case T_SLASH:      fprintf(g_Listing, "/\n");   break;
         case T_ENDFILE:    fprintf(g_Listing, "EOF\n"); break;
-        case T_NUMBER:     fprintf(g_Listing, "NUMBER, val = %s\n", lexeme);      break;
-        case T_IDENTIFIER: fprintf(g_Listing, "IDENTIFIER, name = %s\n", lexeme); break;
-        case T_ERROR:      fprintf(g_Listing, "ERROR: %s\n", lexeme);             break;
+        case T_NUMBER:     fprintf(g_Listing, "literal, val = %s\n", lexeme);     break;
+        case T_IDENTIFIER: fprintf(g_Listing, "identifier, name = %s\n", lexeme); break;
+        case T_ERROR:      fprintf(g_Listing, "error: %s\n", lexeme);             break;
         case T_IF:
         case T_THEN:
         case T_ELSE:

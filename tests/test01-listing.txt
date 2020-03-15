@@ -1,0 +1,32 @@
+
+RangerLang Compile Listing for 
+    /home/barrett/Programming/Repos/Ranger-Lang/tests/test01.rl
+
+   1: /* Test comments, 
+   2: expressions, 
+   3: and assignment 
+   4: */
+   5: 
+   6: /* Comment */ x := 2;
+   7: 
+   8: x := 1;
+   9: y := x;
+  10: 
+  11: x := y + 4;
+  12: x := 6 / 2;
+
+Syntax Tree:
+  Assignment: x
+    Literal: 2
+  Assignment: x
+    Literal: 1
+  Assignment: y
+    Identifier: x
+  Assignment: x
+    Operator: +
+      Identifier: y
+      Literal: 4
+  Assignment: x
+    Operator: /
+      Literal: 6
+      Literal: 2

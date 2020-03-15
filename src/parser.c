@@ -18,7 +18,7 @@ static TreeNode *parse_Factor();
 
 
 // Generic syntax error handler
-static void syntaxError(char *message){
+static void syntaxError(const char *message){
     fprintf(g_Listing, "\n>>> ");
     fprintf(g_Listing, "Syntax error at line %d: %s", g_Lineno, message);
     g_Error = TRUE;

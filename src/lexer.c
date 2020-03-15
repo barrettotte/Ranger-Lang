@@ -6,7 +6,7 @@
 // Lexer DFA states
 typedef enum{
     LS_START, LS_INASSIGN, 
-    LS_ENTERCOMMENT, LS_INCOMMENT, LS_EXITINGCOMMENT,
+    LS_ENTERMLCOMMENT, LS_INMLCOMMENT, LS_EXITMLCOMMENT,
     LS_INNUMBER, LS_INIDENTIFIER, LS_DONE
 } LexerState;
 
@@ -59,13 +59,34 @@ static void backtrack(){
 
 
 // Search for keyword and get its token, otherwise assumed identifier
-static TokenType lookupKeyword(char *identifer){
+static TokenType lookupKeyword(const char *identifer){
     for(int i = 0; i < MAXKEYWORDS; i++){
         if(!strcmp(identifer, keywords[i].str)){
             return keywords[i].token;
         }
     }
     return T_IDENTIFIER;
+}
+
+
+// Lex a symbol
+static TokenType lex_Symbol(const char c){
+    TokenType currentToken;
+    switch(c){
+        case EOF: currentToken = T_ENDFILE;   break;
+        case '/': currentToken = T_SLASH;     break;
+        case '=': currentToken = T_EQ;        break;
+        case '<': currentToken = T_LT;        break;
+        case '>': currentToken = T_GT;        break;
+        case '+': currentToken = T_PLUS;      break;
+        case '-': currentToken = T_MINUS;     break;
+        case '*': currentToken = T_STAR;      break;
+        case '(': currentToken = T_LPAREN;    break;
+        case ')': currentToken = T_RPAREN;    break;
+        case ';': currentToken = T_SEMICOLON; break;
+        default:  currentToken = T_ERROR;     break;
+    }
+    return currentToken;
 }
 
 
@@ -94,49 +115,39 @@ TokenType getToken(){
                 }
                 else if(c == '/'){
                     saveLexeme = FALSE;
-                    state = LS_ENTERCOMMENT;
+                    state = LS_ENTERMLCOMMENT;
                 } else{
                     state = LS_DONE;
-                    switch(c){
-                        case EOF:
-                            saveLexeme = FALSE;
-                            currentToken = T_ENDFILE;
-                            break;
-                        case '/': currentToken = T_SLASH;     break;
-                        case '=': currentToken = T_EQ;        break;
-                        case '<': currentToken = T_LT;        break;
-                        case '>': currentToken = T_GT;        break;
-                        case '+': currentToken = T_PLUS;      break;
-                        case '-': currentToken = T_MINUS;     break;
-                        case '*': currentToken = T_STAR;      break;
-                        case '(': currentToken = T_LPAREN;    break;
-                        case ')': currentToken = T_RPAREN;    break;
-                        case ';': currentToken = T_SEMICOLON; break;
-                        default:  currentToken = T_ERROR;     break;
-                    }
+                    saveLexeme = (c == EOF) ? FALSE : TRUE;
+                    currentToken = lex_Symbol(c);
                 }
                 break;
-            case LS_EXITINGCOMMENT:
+            case LS_EXITMLCOMMENT:
                 saveLexeme = FALSE;
                 if(c == '/'){
+                    fprintf_if(g_Listing, "\tmultiline comment END\n", DEBUG_LEXER);
                     state = LS_START;
                 } else{
-                    state = LS_INCOMMENT;
+                    state = LS_INMLCOMMENT;
                 }
                 break;
-            case LS_INCOMMENT:
+            case LS_INMLCOMMENT:
                 saveLexeme = FALSE;
                 if(c == '*'){    
-                    state = LS_EXITINGCOMMENT;
+                    state = LS_EXITMLCOMMENT;
                 }
                 break;
-            case LS_ENTERCOMMENT:
+            case LS_ENTERMLCOMMENT:
+                backtrack();
                 if(c == '*'){
+                    fprintf_if(g_Listing, "\tmultiline comment BEGIN\n", DEBUG_LEXER);
                     saveLexeme = FALSE;
-                    state = LS_INCOMMENT;
+                    state = LS_INMLCOMMENT;
                 } else{
+                    // slash was not the start of a comment, it is a division operator
                     saveLexeme = TRUE;
-                    state = LS_START;
+                    currentToken = T_SLASH;
+                    state = LS_DONE;
                 }
                 break;
             case LS_INASSIGN:
@@ -181,6 +192,10 @@ TokenType getToken(){
                 currentToken = lookupKeyword(g_Lexeme);
             }
         }
+    }
+    if(DEBUG_LEXER){
+        fprintf(g_Listing, "\ttoken ->  ");
+        printToken(currentToken, g_Lexeme);
     }
     return currentToken;
 }
