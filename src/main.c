@@ -1,8 +1,6 @@
 #include <linux/limits.h>
-#include <stdlib.h>
 
 #include "rangerlang.h"
-
 
 
 // Initialize global variables
@@ -11,10 +9,21 @@ void init(){
     g_Error = FALSE;
 }
 
+
+// Close file pointers and whatever else
+void cleanup(){
+    fclose(g_Listing);
+    fclose(g_Target);
+}
+
+
 int main(int argc, char *argv[]){
     TreeNode *syntaxTree;
-    char filePath[PATH_MAX];
-    char srcName[64];
+    char sourceName[64];
+    char sourcePath[PATH_MAX];
+    char listingPath[PATH_MAX];
+    char targetPath[PATH_MAX];
+    int sourcePathLen = 0;
 
     if(argc != 2){
         fprintf(stderr, "Usage: %s <file name>\n", argv[0]);
@@ -23,21 +32,32 @@ int main(int argc, char *argv[]){
     init();
 
     // Append file extension if none provided
-    strcpy(srcName, argv[1]);
-    if(strchr(srcName, '.') == NULL){
-        strcat(srcName, ".rl");
+    strcpy(sourceName, argv[1]);
+    if(strchr(sourceName, '.') == NULL){
+        strcat(sourceName, ".rl");
     }
-    realpath(srcName, filePath);
+
+    // Setup target and compile listing file paths
+    realpath(sourceName, sourcePath);
+    sourcePathLen = strlen(sourcePath);
+    strncpy(listingPath, sourcePath, sourcePathLen-3);
+    strcat(listingPath, "-listing.txt");
+    strncpy(targetPath, sourcePath, sourcePathLen-3);
+    strcat(targetPath, ".asm");
     
-    g_Source = fopen(srcName, "r");
+    g_Source = fopen(sourcePath, "r");
     if(g_Source == NULL){
-        fprintf(stderr, "Could not find '%s'\n", filePath);
-        exit(1);
+        fprintf(stderr, "Could not find '%s'\n", sourcePath);
+        return 1;
     }
 
     //g_Listing = stdout;
-    g_Listing = fopen("../out/listing.txt", "w");
-    fprintf(g_Listing, "\nRangerLang Compile Listing for %s\n", srcName);
+    g_Listing = fopen(listingPath, "w");
+    if(g_Listing == NULL){
+        printf("Could not open %s\n", listingPath);
+        return 1;
+    }
+    fprintf(g_Listing, "\nRangerLang Compile Listing for %s\n", sourcePath);
 
 
     // Lexical and Syntax analysis
@@ -50,16 +70,14 @@ int main(int argc, char *argv[]){
     // TODO: Code generation
 
     if(!g_Error){
-        g_Target = fopen("../out/test.asm", "w");
+        g_Target = fopen(targetPath, "w");
         if(g_Target == NULL){
-            printf("Could not open %s\n", "../out/test.asm");
-            exit(1);
+            printf("Could not open %s\n", targetPath);
+            return 1;
         }
-
-        fprintf(g_Target, "; Compilation of %s\n", filePath);
+        fprintf(g_Target, "; Compilation of %s\n", sourcePath);
     }
 
-    fclose(g_Listing);
-    fclose(g_Target);
+    cleanup();
     return 0;
 }

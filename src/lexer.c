@@ -70,6 +70,7 @@ static TokenType lookupKeyword(char *identifer){
 
 
 // Return next token in source program
+// Attempting to be a deterministic finite automata (DFA)
 TokenType getToken(){
     int lexemeIndex = 0;
     TokenType currentToken;
