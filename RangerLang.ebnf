@@ -1,11 +1,70 @@
 (* RangerLang EBNF grammar rules *)
 
 
+program             = {statement}
+                    ;
+
+statement           = (block | if_stmt | dow_stmt | assign_stmt | read_stmt | write_stmt), ";"
+                    ;
+
+block               = {statement}
+                    ;
+
+dow_stmt            = 'dow', expression, ";", block, 'enddo'
+                    ;
+
+if_stmt             = 'if', expression, ";", block, ['else', block], 'endif'
+                    ;
+
+assign_stmt         = identifier, ":=", expression
+                    ;
+
+read_stmt           = 'read', identifier
+                    ;
+
+write_stmt          = 'write', expression
+                    ;
+
+expression          = simple_expr, {additive_op, term}
+                    ;
+
+simple_expr         = term, {additive_op, term}
+                    ;
+
+term                = factor {multipl_op, factor}
+                    ;
+
+factor              = literal
+                    | identifier
+                    | sub_expr
+                    | unary
+                    ;
+
+sub_expr            = "(", expression, ")"
+                    ;
+
+unary               = ("+" | "-" | "!"), expression
+                    ;
+
+relation_op         = "<" | ">" | "=" | ">=" | "<=" | "<>"
+                    ;
+
+additive_op         = "+" | "-" | "||"
+                    ;
+
+multipl_op          = "*" | "/" | "&&"
+                    ;
+
+ml_comment          = '*/', {character}, '*/'
+                    ;
 
 identifier          = letter, {letter | digit | "_"} 
                     ;
 
-number              = digit, {digit} 
+literal             = int_literal
+                    ;
+
+int_literal         = digit, {digit} 
                     ;
 
 

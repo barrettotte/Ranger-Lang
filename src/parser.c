@@ -192,7 +192,7 @@ TreeNode *parse_Expression(){
 }
 
 
-// Parse a simple expression
+// Parse a simple expression (additive)
 TreeNode *parse_SimpleExpr(){
     TreeNode *t = parse_Term();
 
@@ -211,7 +211,7 @@ TreeNode *parse_SimpleExpr(){
 }
 
 
-// Parse a term
+// Parse a term (multiplicative)
 TreeNode *parse_Term(){
     TreeNode *t = parse_Factor();
 
