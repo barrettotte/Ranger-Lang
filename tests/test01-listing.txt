@@ -1,6 +1,6 @@
 
 RangerLang Compile Listing for 
-    /home/barrett/Programming/Repos/Ranger-Lang/tests/test01.rl
+    /home/barrett/Programming/Repos/Ranger-Lang/tests/test01.rg
 
    1: /* Test comments, 
    2: expressions, 

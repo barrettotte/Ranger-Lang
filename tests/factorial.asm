@@ -1,1 +1,1 @@
-; Compilation of /home/barrett/Programming/Repos/Ranger-Lang/tests/factorial.rl
+; Compilation of /home/barrett/Programming/Repos/Ranger-Lang/tests/factorial.rg

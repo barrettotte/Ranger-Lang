@@ -1,6 +1,6 @@
 
 RangerLang Compile Listing for 
-    /home/barrett/Programming/Repos/Ranger-Lang/tests/factorial.rl
+    /home/barrett/Programming/Repos/Ranger-Lang/tests/factorial.rg
 
    1: /* Compute a factorial
    2:   in RangerLang

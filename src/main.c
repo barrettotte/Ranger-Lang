@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
     // Get source file full path with extension
     strcpy(srcName, argv[1]);
     if(strchr(srcName, '.') == NULL){
-        strcat(srcName, ".rl"); // Append file extension if not given
+        strcat(srcName, ".rg"); // Append file extension if not given
     }
     realpath(srcName, srcPath);
     

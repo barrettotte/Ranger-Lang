@@ -5,7 +5,7 @@
 make clean
 make
 
-for f in tests/*.rl
+for f in tests/*.rg
 do
   if [[ $? -ne 0 ]] ; then
     exit 1
