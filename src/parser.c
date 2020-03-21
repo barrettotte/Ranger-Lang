@@ -1,3 +1,5 @@
+// Build syntax tree from tokens retrieved from lexer
+
 #include "rangerlang.h"
 
 
@@ -102,6 +104,7 @@ TreeNode *parse_IfStmt(){
     }
     if(currentToken == T_ELSE){
         matchToken(T_ELSE);
+        matchToken(T_SEMICOLON);
         if(t != NULL){
             t->children[2] = parse_Block(); // else block
         }

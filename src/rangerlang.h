@@ -29,11 +29,11 @@
 #endif
 
 
-/* Length Definitions */
-#define MAXKEYWORDS   8     // number of keywords
-#define MAXTREECHILD  3     // number of children in tree
-#define MAXTOKENLEN  40     // maximum token size
-
+/* Length/Size Definitions */
+#define MAXKEYWORDS    7    // number of keywords
+#define MAXTREECHILD   3    // number of children in tree
+#define MAXTOKENLEN   40    // maximum token size
+#define MAXSYMTBLDS  256    // maximum size of symbol table's data structure
 
 /* Compile Listing Flags */
 #define DEBUG_LEXER  FALSE  // include debug output for lexer
@@ -63,7 +63,7 @@ char g_Lexeme[MAXTOKENLEN+1];  // lexeme of identifier or keyword
 
 typedef enum{
     T_ENDFILE, T_ERROR,
-    T_IF, T_THEN, T_ELSE, T_ENDIF, T_DOW, T_ENDDO, 
+    T_IF, T_ELSE, T_ENDIF, T_DOW, T_ENDDO, 
     T_READ, T_WRITE,
     T_IDENTIFIER, T_NUMBER,
     T_ASSIGN, 
@@ -126,15 +126,24 @@ TokenType getToken();                                  // return next token from
 /* Parser */
 TreeNode *parse();                                     // return built syntax tree of source program
 
+/* Analyzer */
+void buildSymbolTable(TreeNode *t);                    // build symbol table from syntax tree (preorder traversal)
+void checkType(TreeNode *t);                           // type check syntax tree node (postorder traversal)
+
 /* Syntax Tree */
 TreeNode *newStmtNode(StmtKind sk);                    // create new statement node
 TreeNode *newExprNode(ExprKind ek);                    // create new expression node
 
+/* Symbol Table */
+void insertSymbol(char *n, int ln, int ml);            // insert new symbol into symbol table
+int  lookupSymbol(char *n);                            // lookup symbol from symbol table
+
 /* Printing */
 void printToken(TokenType tt, const char *c);          // print token and lexeme to compile listing
-void printTree(TreeNode *root);                        // print tree to compile listing
+void printTree(TreeNode *r);                           // print tree to compile listing
 void fprintf_if(FILE *f, const char *m, const int c);  // fprintf to file only if cond is true
-void printFile(const char *filePath);                  // print file contents to STDOUT
+void printFile(const char *fp);                        // print file contents to STDOUT
+void printSymbolTable(FILE *f);                        // print formatted symbol table to file
 
 /* Misc */
 char *copyString(char *s);                             // make new copy of string s

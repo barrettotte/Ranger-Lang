@@ -1,3 +1,5 @@
+// General utilities
+
 #include "rangerlang.h"
 
 static int indentno = 0; // used by printTree
@@ -60,6 +62,7 @@ TreeNode *newExprNode(ExprKind exprKind){
             t->sibling = NULL;
             t->nodeKind = NK_Expr;
             t->kind.expr = exprKind;
+            t->lineno = g_Lineno;
             t->type = ET_VOID;
         }
     } else {
@@ -88,7 +91,6 @@ void printToken(TokenType tokenType, const char *lexeme){
         case T_IDENTIFIER: fprintf(g_Listing, "identifier, name = %s\n", lexeme); break;
         case T_ERROR:      fprintf(g_Listing, "error: %s\n", lexeme);             break;
         case T_IF:
-        case T_THEN:
         case T_ELSE:
         case T_ENDIF:
         case T_DOW:
@@ -145,11 +147,13 @@ static void printExprNode(TreeNode *node){
     }
 }
 
+// TODO: better tree printing, doesn't look good with nested blocks...
 // print tree to compile listing
 void printTree(TreeNode *tree){
     INDENT;
     while(tree != NULL){
         printSpaces();
+        //fprintf(g_Listing, "Lineno: %d  ", tree->lineno); // somewhat useful debug print
         switch(tree->nodeKind){
             case NK_Stmt:  printStmtNode(tree);  break;
             case NK_Expr:  printExprNode(tree);  break;

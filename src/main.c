@@ -1,3 +1,5 @@
+// Driver program for compiler
+
 #include <linux/limits.h>
 
 #include "rangerlang.h"
@@ -30,7 +32,7 @@ void validateArgs(char argc, char *argv[]){
 char *buildFileName(const char *srcPath, const char *ext){
     char *s = malloc(sizeof (char) *PATH_MAX);
     int pathLen = strlen(srcPath);
-    strncpy(s, srcPath, pathLen-3); // .rl (-3)
+    strncpy(s, srcPath, pathLen-3); // .rg (-3)
     strcat(s, ext);
     return s;
 }
@@ -54,28 +56,33 @@ void compile(const char *srcPath){
     } else{
         criticalOpen(&g_Listing, buildFileName(srcPath, "-listing.txt"), "w");
     }
-    fprintf(g_Listing, "\nRangerLang Compile Listing for \n    %s\n\n", srcPath);
+    fprintf(g_Listing, "\nRangerLang Compile Listing for \n    %s\n", srcPath);
 
-    syntaxTree = parse(); // Lexical and Syntax analysis
+    // Lexical and Syntax analysis
+    fprintf(g_Listing, "\nSource Program:\n");
+    syntaxTree = parse();
     if(PRINT_TREE){
         fprintf(g_Listing, "\nSyntax Tree:\n");
         printTree(syntaxTree);
     }
 
-    // TODO: Build symbol table and semantic analysis
+    // Semantic Analysis
+    fprintf(g_Listing, "\nBuilding symbol table...\n");
+    buildSymbolTable(syntaxTree);
+    fprintf(g_Listing, "\nChecking types...\n");
+    checkType(syntaxTree);
     
     if(!g_Error){
         criticalOpen(&g_Target, buildFileName(srcPath, ".asm"), "w");
         // TODO: Code generation
         fprintf(g_Target, "; Compilation of %s\n", srcPath);
     }
+    fprintf(g_Listing, "\nDONE.\n");
 }
 
 
 int main(int argc, char *argv[]){
-    char srcName[64];
-    char srcPath[PATH_MAX];
-
+    char srcName[64], srcPath[PATH_MAX];
     validateArgs(argc, argv);
     init();
 

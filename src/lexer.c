@@ -1,5 +1,6 @@
-#include "rangerlang.h"
+// Scan source program
 
+#include "rangerlang.h"
 
 #define LINEBUFFLEN 256     // length of source line buffer
 
@@ -17,7 +18,6 @@ static struct{
     TokenType token;
 } keywords[MAXKEYWORDS] = {
     {"if", T_IF}, 
-    {"then", T_THEN}, 
     {"else", T_ELSE}, 
     {"endif", T_ENDIF},
     {"dow", T_DOW},
@@ -33,18 +33,20 @@ char g_Lexeme[MAXTOKENLEN+1];
 static char lineBuffer[LINEBUFFLEN]; // current line of source
 static int linePos = 0;              // current position in line buffer
 static int bufferSize = 0;           // current size of line buffer
+static int EOF_flag = FALSE;         // track EOF
 
 
 // Get next non-whitespace character from line buffer
-static char getNextChar(){
+static int getNextChar(){
     if(!(linePos < bufferSize)){
         g_Lineno++;
         if(fgets(lineBuffer, LINEBUFFLEN-1, g_Source)){
-            fprintf(g_Listing, "%4d: %s", g_Lineno, lineBuffer);
+            fprintf(g_Listing, "%04d: %s", g_Lineno, lineBuffer);
             bufferSize = strlen(lineBuffer);
             linePos = 0;
             return lineBuffer[linePos++];
         } else{
+            EOF_flag = TRUE;
             return EOF;
         }
     }
@@ -54,7 +56,9 @@ static char getNextChar(){
 
 // Backtrack one character in line buffer
 static void backtrack(){
-    linePos--;
+    if(!EOF_flag){
+        linePos--;
+    }
 }
 
 
@@ -99,7 +103,7 @@ TokenType getToken(){
     int saveLexeme;
 
     while(state != LS_DONE){
-        char c = getNextChar();
+        int c = getNextChar();
         saveLexeme = TRUE;
 
         switch(state){
@@ -139,7 +143,10 @@ TokenType getToken(){
                 break;
             case LS_ENTERMLCOMMENT:
                 backtrack();
-                if(c == '*'){
+                if(c == EOF){
+                    state = LS_DONE;
+                    currentToken = T_ENDFILE;
+                } else if(c == '*'){
                     fprintf_if(g_Listing, "\tmultiline comment BEGIN\n", DEBUG_LEXER);
                     saveLexeme = FALSE;
                     state = LS_INMLCOMMENT;
@@ -184,7 +191,7 @@ TokenType getToken(){
                 break;
         }
         if((saveLexeme) && (lexemeIndex < MAXTOKENLEN)){
-            g_Lexeme[lexemeIndex++] = c;
+            g_Lexeme[lexemeIndex++] = (char) c;
         }
         if(state == LS_DONE){
             g_Lexeme[lexemeIndex] = '\0';
