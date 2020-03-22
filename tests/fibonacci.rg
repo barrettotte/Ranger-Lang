@@ -1,22 +1,18 @@
-/* Compute fibonacci number
-   using iterative method since
-   my language doesn't have functions.
+/* Compute fibonacci number using iterative method 
+     since my language does not have functions.
 */
 
+fib := 1;
 read n;
 
-fib := 1;
-
-
-if(n > 0);
-  prevFib := 1;
+if(n > 1);
+  prev := 1;
   i := 2;
 
   dow(i < n);
     temp := fib;
-    fib := fib + prevFib;
-    prevFib := temp;
-
+    fib := fib + prev;
+    prev := temp;
     i := i + 1;
   enddo;
 else;

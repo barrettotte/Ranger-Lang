@@ -61,7 +61,7 @@ void compile(const char *srcPath){
     // Lexical and Syntax analysis
     fprintf(g_Listing, "\nSource Program:\n");
     syntaxTree = parse();
-    if(PRINT_TREE){
+    if(DEBUG_PARSER){
         fprintf(g_Listing, "\nSyntax Tree:\n");
         printTree(syntaxTree);
     }
@@ -74,8 +74,8 @@ void compile(const char *srcPath){
     
     if(!g_Error){
         criticalOpen(&g_Target, buildFileName(srcPath, ".asm"), "w");
-        // TODO: Code generation
-        fprintf(g_Target, "; Compilation of %s\n", srcPath);
+        fprintf(g_Listing, "\nGenerating code...\n");
+        generateCode(syntaxTree, srcPath);
     }
     fprintf(g_Listing, "\nDONE.\n");
 }

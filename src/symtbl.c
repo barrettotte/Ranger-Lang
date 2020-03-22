@@ -2,8 +2,10 @@
 
 #include "rangerlang.h"
 
-#define HASHSHIFT 4
+#define PRIME     211
+#define HASHSHIFT   4
 
+// Why 211 ? Read about hashpjw - P.J. Weinberger's C compiler
 
 // linked list of source line numbers where a symbol is referenced
 typedef struct LineNumberListRecord{
@@ -21,7 +23,7 @@ typedef struct BucketListRecord{
 } *BucketList;
 
 
-static BucketList hashTable[MAXSYMTBLDS];
+static BucketList hashTable[PRIME];
 
 
 // hash generation function
@@ -29,7 +31,7 @@ static int hash(char *key){
     int temp = 0;
     int i = 0;
     while(key[i] != '\0'){
-        temp = ((temp << HASHSHIFT) + key[i]) % MAXSYMTBLDS;
+        temp = ((temp << HASHSHIFT) + key[i]) % PRIME;
         i++;
     }
     return temp;
@@ -90,7 +92,7 @@ int lookupSymbol(char *name){
 void printSymbolTable(FILE *f){
     fprintf(f, "Symbol         Location    Reference(s)\n");
     fprintf(f, "-----------    --------    ------------\n");
-    for(int i = 0; i < MAXSYMTBLDS; i++){
+    for(int i = 0; i < PRIME; i++){
         if(hashTable[i] != NULL){
             BucketList bl = hashTable[i];
             while(bl != NULL){

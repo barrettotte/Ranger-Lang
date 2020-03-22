@@ -31,15 +31,13 @@
 
 /* Length/Size Definitions */
 #define MAXKEYWORDS    7    // number of keywords
-#define MAXTREECHILD   3    // number of children in tree
+#define MAXTREECHILD   3    // number of children in syntax tree
 #define MAXTOKENLEN   40    // maximum token size
-#define MAXSYMTBLDS  256    // maximum size of symbol table's data structure
 
 /* Compile Listing Flags */
 #define DEBUG_LEXER  FALSE  // include debug output for lexer
 #define DEBUG_PARSER FALSE  // include debug output for parser
-#define PRINT_TREE   TRUE   // include syntax tree in listing
-#define PRINT_STDOUT FALSE  // print compile listing to STDOUT
+#define PRINT_STDOUT TRUE   // print compile listing to STDOUT
 
 
 /*********************************************************/
@@ -130,6 +128,9 @@ TreeNode *parse();                                     // return built syntax tr
 void buildSymbolTable(TreeNode *t);                    // build symbol table from syntax tree (preorder traversal)
 void checkType(TreeNode *t);                           // type check syntax tree node (postorder traversal)
 
+/* Code Generator */
+void generateCode(TreeNode *st, const char* t);        // generate code from syntax tree traversal
+
 /* Syntax Tree */
 TreeNode *newStmtNode(StmtKind sk);                    // create new statement node
 TreeNode *newExprNode(ExprKind ek);                    // create new expression node
@@ -147,7 +148,6 @@ void printSymbolTable(FILE *f);                        // print formatted symbol
 
 /* Misc */
 char *copyString(char *s);                             // make new copy of string s
-
 
 
 #endif

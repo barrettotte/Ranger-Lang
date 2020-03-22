@@ -5,11 +5,15 @@ Compiles RangerLang source to assembly for a barebones VM called RangerVM.
 
 ## About
 This language was my introduction to the world of compilers. 
+
+
 The goal of writing this was to learn, so there's not a lot of interesting stuff implemented. 
-In the future, I do want to make a full object oriented language to further my knowledge.
+Additionally, I wimped out and didn't dive into functions. 
+So, I did miss out on a lot of good stuff about activation records, heap management, etc.
+In the future, I will make a full blown object oriented language to fill in the missing knowledge and more.
 
 I started out making a dumber version of C's grammar, but decided for ease of parsing I would take RPGLE's method of code blocks (if -> endif, dow -> enddo).
-I've been studying RPGLE lately and the simple grammar just makes sense as a good starting point for writing a language.
+I've been studying RPGLE lately and the simple grammar just makes sense as a good starting point for writing an introductory language.
 
 This compiler takes RangerLang source and compiles it to assembly for a barebones VM called RangerVM.
 
@@ -19,21 +23,25 @@ RangerLang is named after my cat that always hangs out in my room while I code.
 ## Features
 The full context free grammar can be found in **RangerLang.ebnf**.
 But, I will briefly list the sparse features I implemented:
-TODO:
+- [x] Integer variables
+- [x] Base operators - ```+ - / * < > = :=```
+- [x] If/else 
+- [x] Do while
+- [x] Read
+- [x] Write
+- [x] Basic virtual machine
 
 
 ## Stretch Features
-Every side project starts out fun, but later becomes stale, we'll see if I get here.
-If not, I'm sure the next language I make will have these.
+Every side project starts out fun, but later becomes stale; We'll see if I get here.
+If not, I'm sure the next language I make will have these and more.
 
-- [ ] Additional relational operators - NE, GE, LE
-- [ ] Additional binary operators - &&, ||
-- [ ] Unary operators - !, +, -
+- [ ] Additional relational operators - ```!=, >=, <=```
+- [ ] Additional binary operators - ```&&, ||```
+- [ ] Unary operators - ```!, +, -```
+- [ ] Strict type definition - new keywords ```int, float, string```
 - [ ] Additional data types - float, string
-- [ ] Arrays
-- [ ] Pointers
-- [ ] Functions - Definitely not going to have the mental bandwidth at the moment
-
+- [ ] Integer arrays
 
 
 ## Compilation Example
