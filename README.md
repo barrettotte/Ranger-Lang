@@ -241,6 +241,12 @@ RangerVM Ended.
 ```
 
 
+## Commands
+* Compile a single RangerLang source file - ```./rangerlang ../tests/fibonacci.rg```
+* Run RangerVM assembly - ```./rangervm ../tests/fibonacci.asm```
+* Build and test compile all example files - ```./test.sh```
+
+
 ## References
 * EBNF
   * https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form
