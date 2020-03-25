@@ -71,6 +71,8 @@ write fib;
 ```
 
 #### Target program (RangerVM Assembly Language) - **fibonacci.asm**
+Psuedo-assembly meant to mimic how a ROM would work...all opcodes listed in **opcodes.asm**
+
 ```assembly
 ; RangerLang compilation to RangerVM Assembly
 ; File: /home/barrett/Programming/Repos/Ranger-Lang/tests/fibonacci.rg
