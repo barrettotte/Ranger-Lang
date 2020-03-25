@@ -1,6 +1,6 @@
 # Ranger-Lang
 A programming language designed while studying compilers and taking heavy inspiration from RPGLE and C grammars.
-Compiles RangerLang source to assembly for a barebones VM called RangerVM.
+Compiles RangerLang source to a pseudo-assembly language for a simple VM called RangerVM..
 
 
 ## About
