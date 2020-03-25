@@ -36,8 +36,8 @@
 
 /* Compile Listing Flags */
 #define DEBUG_LEXER  FALSE  // include debug output for lexer
-#define DEBUG_PARSER FALSE  // include debug output for parser
-#define PRINT_STDOUT TRUE   // print compile listing to STDOUT
+#define DEBUG_PARSER TRUE   // include debug output for parser
+#define PRINT_STDOUT FALSE  // print compile listing to STDOUT
 
 
 /*********************************************************/

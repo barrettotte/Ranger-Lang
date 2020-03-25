@@ -1,0 +1,79 @@
+
+RangerLang Compile Listing for 
+    /home/barrett/Programming/Repos/Ranger-Lang/tests/fibonacci.rg
+
+Source Program:
+0001: /* Compute fibonacci number using iterative method 
+0002:      since my language does not have functions.
+0003: */
+0004: 
+0005: read n;
+0006: fib := 1;
+0007: 
+0008: if(n > 1);
+0009:   temp := 0;
+0010:   prev := 1;
+0011:   i := 2;
+0012: 
+0013:   dow(i < (n-1));
+0014:     temp := fib;
+0015:     fib := fib + prev;
+0016:     prev := temp;
+0017:     i := i + 1;
+0018:   enddo;
+0019: endif;
+0020: 
+0021: write fib;
+
+Syntax Tree:
+  Read: n
+  Assignment: fib
+    Literal: 1
+  If
+    Operator: >
+      Identifier: n
+      Literal: 1
+    Assignment: temp
+      Literal: 0
+    Assignment: prev
+      Literal: 1
+    Assignment: i
+      Literal: 2
+    Dow
+      Operator: <
+        Identifier: i
+        Operator: -
+          Identifier: n
+          Literal: 1
+      Assignment: temp
+        Identifier: fib
+      Assignment: fib
+        Operator: +
+          Identifier: fib
+          Identifier: prev
+      Assignment: prev
+        Identifier: temp
+      Assignment: i
+        Operator: +
+          Identifier: i
+          Literal: 1
+  Write
+    Identifier: fib
+
+Building symbol table...
+
+Symbol Table:
+
+Symbol         Address     Reference(s)
+-----------    --------    ------------
+temp           2           0009 0014 0016 
+fib            1           0006 0014 0015 0021 
+i              4           0011 0013 0017
+n              0           0005 0008 0013 
+prev           3           0010 0015 0016 
+
+Checking types...
+
+Generating code...
+
+DONE.

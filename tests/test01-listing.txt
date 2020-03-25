@@ -1,0 +1,48 @@
+
+RangerLang Compile Listing for 
+    /home/barrett/Programming/Repos/Ranger-Lang/tests/test01.rg
+
+Source Program:
+0001: /* Test comments, 
+0002: expressions, 
+0003: and assignment 
+0004: */
+0005: 
+0006: /* Comment */ x := 2;
+0007: 
+0008: x := 1;
+0009: y := x;
+0010: 
+0011: x := y + 4;
+0012: x := 6 / 2;
+
+Syntax Tree:
+  Assignment: x
+    Literal: 2
+  Assignment: x
+    Literal: 1
+  Assignment: y
+    Identifier: x
+  Assignment: x
+    Operator: +
+      Identifier: y
+      Literal: 4
+  Assignment: x
+    Operator: /
+      Literal: 6
+      Literal: 2
+
+Building symbol table...
+
+Symbol Table:
+
+Symbol         Address     Reference(s)
+-----------    --------    ------------
+x              0           0006 0008 0009 0011 0012 
+y              1           0009 0011 
+
+Checking types...
+
+Generating code...
+
+DONE.

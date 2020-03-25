@@ -4,7 +4,7 @@
 
 
 // track position in memory
-static int memoryLocation = 0;
+static int memoryAddress= 0;
 
 
 // Generic recursive tree traversal
@@ -46,7 +46,7 @@ static void insertExprNode(TreeNode *t){
     switch(t->kind.expr){
         case EK_IDENTIFIER:
             if(lookupSymbol(t->attr.name) == -1){
-                insertSymbol(t->attr.name, t->lineno, memoryLocation++);
+                insertSymbol(t->attr.name, t->lineno, memoryAddress++);
             } else{
                 insertSymbol(t->attr.name, t->lineno, 0);
             }
@@ -64,7 +64,7 @@ static void insertStmtNode(TreeNode *t){
         case SK_READ:
             if(lookupSymbol(t->attr.name) == -1){
                 // Not in symbol table, new symbol
-                insertSymbol(t->attr.name, t->lineno, memoryLocation++);
+                insertSymbol(t->attr.name, t->lineno, memoryAddress++);
             } else{
                 // Exists in symbol table, add line number as reference
                 insertSymbol(t->attr.name, t->lineno, 0);

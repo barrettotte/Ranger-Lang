@@ -18,7 +18,7 @@ typedef struct LineNumberListRecord{
 typedef struct BucketListRecord{
     char *name;
     LineNumberList lineNumbers;
-    int memoryLoc;
+    int memoryAddr;
     struct BucketListRecord *next;
 } *BucketList;
 
@@ -39,7 +39,7 @@ static int hash(char *key){
 
 
 // Insert new symbol into symbol table
-void insertSymbol(char *name, int lineno, int memoryLoc){
+void insertSymbol(char *name, int lineno, int memoryAddr){
     int hashed = hash(name);
     BucketList bl = hashTable[hashed];
 
@@ -52,7 +52,7 @@ void insertSymbol(char *name, int lineno, int memoryLoc){
         bl->name = name;
         bl->lineNumbers = (LineNumberList) malloc(sizeof(struct LineNumberListRecord));
         bl->lineNumbers->lineno = lineno;
-        bl->memoryLoc = memoryLoc;
+        bl->memoryAddr = memoryAddr;
         bl->lineNumbers->next = NULL;
         bl->next = hashTable[hashed];
         hashTable[hashed] = bl;
@@ -72,7 +72,7 @@ void insertSymbol(char *name, int lineno, int memoryLoc){
 }
 
 
-// Lookup symbol and return memory location, -1 if not found
+// Lookup symbol and return memory address, -1 if not found
 int lookupSymbol(char *name){
     int hashed = hash(name);
     BucketList bl = hashTable[hashed];
@@ -83,14 +83,14 @@ int lookupSymbol(char *name){
     if(bl == NULL){
         return -1;
     }
-    return bl->memoryLoc;
+    return bl->memoryAddr;
 }
 
 
 // print formatted symbol table
-// TODO: order by memory location ??
+// TODO: order by memory address ??
 void printSymbolTable(FILE *f){
-    fprintf(f, "Symbol         Location    Reference(s)\n");
+    fprintf(f, "Symbol         Address     Reference(s)\n");
     fprintf(f, "-----------    --------    ------------\n");
     for(int i = 0; i < PRIME; i++){
         if(hashTable[i] != NULL){
@@ -98,7 +98,7 @@ void printSymbolTable(FILE *f){
             while(bl != NULL){
                 LineNumberList ll = bl->lineNumbers;
                 fprintf(f, "%-14s ", bl->name);
-                fprintf(f, "%-10d  ", bl->memoryLoc);
+                fprintf(f, "%-10d  ", bl->memoryAddr);
                 while(ll != NULL){
                     fprintf(f, "%04d ", ll->lineno);
                     ll = ll->next;
