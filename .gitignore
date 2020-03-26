@@ -32,6 +32,7 @@
 *.app
 
 .vscode
+.wakatime-project
 
 # Binaries
 rangerlang

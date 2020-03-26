@@ -15,9 +15,13 @@ In the future, I will make a full blown object oriented language to fill in the 
 I started out making a dumber version of C's grammar, but decided for ease of parsing I would take RPGLE's method of code blocks (if -> endif, dow -> enddo).
 I've been studying RPGLE lately and the simple grammar just makes sense as a good starting point for writing an introductory language.
 
-This compiler takes RangerLang source and compiles it to assembly for a barebones VM called RangerVM.
 
-RangerLang is named after my cat that always hangs out in my room while I code.
+<figure align="center">
+	<img src="misc/ranger.jpg" alt="Ranger" width="40%" height="40%"/>
+	<figcaption align="center">
+		RangerLang is named after my cat that always hangs out in my room while I code.
+	</figcaption>
+</figure>
 
 
 ## Features
