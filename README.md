@@ -16,11 +16,14 @@ I started out making a dumber version of C's grammar, but decided for ease of pa
 I've been studying RPGLE lately and the simple grammar just makes sense as a good starting point for writing an introductory language.
 
 
-<figure align="center">
-	<img src="misc/ranger.jpg" alt="Ranger" width="40%" height="40%"/>
-	<figcaption align="center">
-		RangerLang is named after my cat that always hangs out in my room while I code.
-	</figcaption>
+
+<figure>
+  <p align="center">
+    <img src="misc/ranger.jpg" alt="Ranger" width="40%" height="40%"/>
+    <figcaption>
+      <p align="center">RangerLang is named after my cat that always hangs out in my room while I code.</p>
+    </figcaption>
+  </p>
 </figure>
 
 
